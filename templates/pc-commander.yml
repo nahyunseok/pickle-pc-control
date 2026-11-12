@@ -1,0 +1,19 @@
+name: PC Remote Commander
+
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: '실행할 명령어 (PowerShell)'
+        required: true
+        type: string
+        default: 'python --version'
+
+jobs:
+  run-on-pc:
+    runs-on: self-hosted
+    steps:
+      - name: Execute Command
+        shell: powershell
+        run: |
+          ${{ github.event.inputs.command }}
