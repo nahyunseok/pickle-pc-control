@@ -1,6 +1,6 @@
 name: PC Remote Commander
 
-on:
+'on':
   workflow_dispatch:
     inputs:
       command:

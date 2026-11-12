@@ -9,7 +9,9 @@ import sys, io, base64, mss
 from PIL import Image
 
 def capture_screen():
-    with mss.mss() as sct:
+    # mss 최신/구버전 호환성 지원 (DeprecationWarning 방지)
+    sct_cls = getattr(mss, "MSS", mss.mss)
+    with sct_cls() as sct:
         mon = sct.monitors[1] if len(sct.monitors) > 1 else sct.monitors[0]
         img = Image.frombytes("RGB", sct.grab(mon).size, sct.grab(mon).bgra, "raw", "BGRX")
         
@@ -23,6 +25,7 @@ def capture_screen():
         img.save(buf, format="JPEG", quality=65)
         b64_str = base64.b64encode(buf.getvalue()).decode("ascii")
         
+        print(f"INFO:{w}x{h}")
         print("===START_SCREEN_CHUNK===")
         for i in range(0, len(b64_str), 200):
             print(b64_str[i:i+200])

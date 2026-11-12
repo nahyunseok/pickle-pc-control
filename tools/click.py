@@ -6,6 +6,9 @@
 """
 import sys, pyautogui
 
+# 모바일 원격 조작 시 화면 모서리 이동으로 인한 PyAutoGUI FailSafeException 방지
+pyautogui.FAILSAFE = False
+
 def click_coords():
     if len(sys.argv) < 3:
         print("Usage: python click.py <x> <y> [clicks]")

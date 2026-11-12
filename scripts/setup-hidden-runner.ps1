@@ -7,9 +7,10 @@ if (-not (Test-Path $runnerDir)) {
 }
 
 # 1. VBScript 생성 (무창 실행)
-$vbsContent = 'Set WshShell = CreateObject("WScript.Shell") : WshShell.Run chr(34) & "C:\Users\" & CreateObject("WScript.Network").UserName & "\actions-runner\run.cmd" & chr(34), 0 : Set WshShell = Nothing'
+# 설치 경로를 동적으로 참조하여 run.cmd를 0(숨김 창)으로 호출합니다.
+$vbsContent = "Set WshShell = CreateObject(""WScript.Shell"") : WshShell.Run chr(34) & ""$runnerDir\run.cmd"" & chr(34), 0 : Set WshShell = Nothing"
 [System.IO.File]::WriteAllText("$runnerDir\run-hidden.vbs", $vbsContent, [System.Text.Encoding]::ASCII)
-Write-Host "1. run-hidden.vbs 생성 완료" -ForegroundColor Green
+Write-Host "1. run-hidden.vbs 생성 완료 ($runnerDir\run-hidden.vbs)" -ForegroundColor Green
 
 # 2. 작업 스케줄러 등록 (-RunLevel Highest 권장)
 $action = New-ScheduledTaskAction -Execute "wscript.exe" -Argument "`"$runnerDir\run-hidden.vbs`""
